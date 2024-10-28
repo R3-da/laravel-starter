@@ -31,9 +31,14 @@ Route::middleware(['api'])->group(function ($router) {
 
     Route::post('register', [RegistrationController::class, 'register']);
     Route::get('email/verify/{id}', [VerificationController::class, 'verify'])->name('verification.verify');
+    Route::post('email/verify', [VerificationController::class, 'verifyCode']);
     Route::get('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
     Route::post('password/email', [ForgotPasswordController::class, 'forgot']);
     Route::post('password/reset', [ForgotPasswordController::class, 'reset']);
 
     Route::patch('user/profile', [UserController::class, 'updateProfile']);
+
+    Route::get('test', function () {
+        return response()->json(['message' => 'This is a test response!']);
+    });
 });

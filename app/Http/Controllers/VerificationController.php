@@ -33,6 +33,28 @@ class VerificationController extends Controller {
         return redirect()->to('/');
     }
 
+    public function verifyCode(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'code' => 'required|string|size:4'
+        ]);
+
+        $user = User::where('email', $request->email)
+                    ->where('verification_code', $request->code)
+                    ->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Invalid verification code'], 422);
+        }
+
+        $user->email_verified_at = now();
+        $user->verification_code = null;
+        $user->save();
+
+        return response()->json(['message' => 'Email successfully verified']);
+    }
+
     /**
      * Resend email verification link
      *
